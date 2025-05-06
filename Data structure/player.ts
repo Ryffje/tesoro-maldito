@@ -1,4 +1,4 @@
-class Player {
+export class Player {
     life: number;
     turns: number;
     position: [number, number];
