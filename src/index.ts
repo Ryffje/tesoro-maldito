@@ -1,5 +1,5 @@
 import * as readline from 'readline';
-import {Game} from './Game';
+import {Game} from './core/Game';
 
 const r1 = readline.createInterface ({
     input: process.stdin,

@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { GameMap } from "./Map";
-import { CellContentType } from "./Cell";
+import { CellContentType } from "../Cell";
 import * as readline from 'readline';
 
 export class Game {
