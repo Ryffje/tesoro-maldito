@@ -1,4 +1,4 @@
-import { Cell, CellContentType } from "../models/gridCell";
+import { Cell, CellContentType } from "../models/gridCell.js";
 export class GameMap {
     grid: Cell [][];
 

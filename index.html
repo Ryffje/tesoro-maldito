@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏝️💀 El Tesoro Maldito</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2d1810 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f4d03f;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .game-container {
+            background: linear-gradient(145deg, #1a1a1a, #2d1810);
+            border: 3px solid #8b4513;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #8b4513, #d2691e, #8b4513);
+            border-radius: 17px;
+            z-index: -1;
+        }
+
+        .game-title {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            color: #f4d03f;
+            font-weight: bold;
+        }
+
+        .menu {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .menu h2 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            color: #e67e22;
+        }
+
+        .menu-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #8b4513, #d2691e);
+            border: 2px solid #f4d03f;
+            color: #f4d03f;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(45deg, #d2691e, #f39c12);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .game-board {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .game-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            border: 2px solid #8b4513;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #f4d03f;
+            font-size: 0.9em;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin: 15px 0;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #8b4513;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #8b4513;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border-color: #f4d03f;
+        }
+
+        .cell.revealed {
+            background: linear-gradient(145deg, #27ae60, #2ecc71);
+        }
+
+        .cell.player {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            animation: pulse 2s infinite;
+        }
+
+        .cell.trap {
+            background: linear-gradient(145deg, #8e44ad, #9b59b6);
+        }
+
+        .cell.gold {
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+        }
+
+        .cell.map-piece {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+        }
+
+        .cell.treasure {
+            background: linear-gradient(145deg, #f1c40f, #f39c12);
+        }
+
+        .cell.empty {
+            background: linear-gradient(145deg, #95a5a6, #7f8c8d);
+        }
+
+        .cell svg {
+            width: 32px;
+            height: 32px;
+            display: block;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .control-btn {
+            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            border: 2px solid #8b4513;
+            color: #f4d03f;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            min-height: 50px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border-color: #f4d03f;
+            background: linear-gradient(145deg, #8b4513, #d2691e);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Posicionamiento específico de las flechas */
+        .control-btn[onclick*="up"] {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .control-btn[onclick*="left"] {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .control-btn[onclick*="right"] {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .control-btn[onclick*="down"] {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .message {
+            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            border: 2px solid #8b4513;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f4d03f;
+            font-size: 0.9em;
+        }
+
+        .instructions {
+            display: none;
+            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            border: 2px solid #8b4513;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            line-height: 1.6;
+            color: #f4d03f;
+        }
+
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: #e67e22;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .instructions li:before {
+            content: "🏴‍☠️";
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                margin: 10px;
+                padding: 10px;
+            }
+            .cell {
+                width: 28px;
+                height: 28px;
+            }
+            .cell svg {
+                width: 20px;
+                height: 20px;
+            }
+            .game-info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .control-btn {
+                min-width: 45px;
+                min-height: 45px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">🏝️💀 El Tesoro Maldito</h1>
+        
+        <div id="menu" class="menu">
+            <h2>¡Bienvenido a la aventura!</h2>
+            <div class="menu-buttons">
+                <button class="btn" onclick="startGame()">🎮 Iniciar Aventura</button>
+                <button class="btn" onclick="showInstructions()">📖 Instrucciones</button>
+            </div>
+        </div>
+
+        <div id="instructions" class="instructions">
+            <h3>🎯 Objetivo:</h3>
+            <p>Encuentra las 3 piezas del mapa y luego abre el tesoro antes de que se acaben tus turnos o tu vida.</p>
+            
+            <h3>🕹️ Cómo jugar:</h3>
+            <ul>
+                <li>Usa los botones de dirección para moverte por la isla</li>
+                <li>Cada celda puede contener trampas, oro, piezas de mapa o el tesoro</li>
+                <li>Empiezas en (0,0) con 100 de vida y 15 turnos</li>
+                <li>Las trampas te quitan 20 de vida</li>
+                <li>El oro te da 50 monedas</li>
+            </ul>
+            
+            <h3>🏆 Cómo ganar:</h3>
+            <p>Recoge 3 piezas de mapa y encuentra el tesoro.</p>
+            
+            <h3>💀 Cómo perder:</h3>
+            <p>Se te acaba la vida (trampas) o los turnos.</p>
+            
+            <button class="btn" onclick="hideInstructions()">Volver al Menú</button>
+        </div>
+
+        <div id="gameBoard" class="game-board">
+            <div class="game-info">
+                <div class="info-item">❤️ Vida: <span id="life">100</span></div>
+                <div class="info-item">🔁 Turnos: <span id="turns">15</span></div>
+                <div class="info-item">🧩 Mapa: <span id="mapPieces">0</span>/3</div>
+                <div class="info-item">🪙 Oro: <span id="gold">0</span></div>
+            </div>
+
+            <div class="message" id="message">¡Usa las flechas para moverte!</div>
+
+            <div class="grid" id="grid"></div>
+
+            <div class="controls">
+                <button class="control-btn" onclick="movePlayer('up')">⬆️</button>
+                <button class="control-btn" onclick="movePlayer('left')">⬅️</button>
+                <button class="control-btn" onclick="movePlayer('right')">➡️</button>
+                <button class="control-btn" onclick="movePlayer('down')">⬇️</button>
+            </div>
+
+            <button class="btn" onclick="backToMenu()">🏠 Volver al Menú</button>
+        </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+</body>
+</html> 

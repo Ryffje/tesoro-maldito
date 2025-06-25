@@ -4,12 +4,16 @@
   "description": "Proyecto en TypeScript orientado a objetos",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "serve": "npx http-server . -p 8080 -o",
+    "start": "npm run build && npm run serve"
   },
-  "keywords": [],
+  "keywords": ["game", "treasure", "typescript"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "http-server": "^14.1.1"
   }
 }
