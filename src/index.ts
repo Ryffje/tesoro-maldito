@@ -7,12 +7,13 @@ const r1 = readline.createInterface ({
 });
 
 function Menu(){
+    console.clear();
     console.log("\n 🏝️🏴‍☠️The Cursed treasure");
     console.log("1. Start the adventure");
     console.log("2. Instructions");
     console.log("3. Exit \n");
 
-    r1.question("Take a option (1-3):", (option) =>{
+    r1.question("Take a option (1-3): ", (option) =>{
         switch (option.trim()) {
             case '1':
                 console.log(" 🌴¡Launching the expedition!");
