@@ -2,7 +2,7 @@ export enum CellContentType {
     Empty = 'Empty',
     Trap = 'Trap',
     Gold = 'Gold',
-    MapPieces = 'MapPiece',
+    MapPiece = 'MapPiece',
     Treasure = 'Treasure'
 }
 

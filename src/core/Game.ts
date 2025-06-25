@@ -57,7 +57,7 @@ export class Game {
                         console.log("🪙 ¡hunt for gold! +50");
                         this.player.collectGold(50);
                         break;
-                    case CellContentType.MapPieces:
+                    case CellContentType.MapPiece:
                         console.log("🗺️🧩 a part of the map");
                         this.player.collectMapPieces();
                         break;

@@ -33,7 +33,7 @@ export class GameMap {
     };
 
     placeRandom(CellContentType.Treasure, 1);
-    placeRandom(CellContentType.MapPieces, 3);
+    placeRandom(CellContentType.MapPiece, 3);
     placeRandom(CellContentType.Trap, 4);
     placeRandom(CellContentType.Gold, 4);
 
