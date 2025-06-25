@@ -75,7 +75,8 @@ export class Game {
                 }
 
             } else {
-                console.log("🔁 Your here again");
+               console.log("🔁 You're here again");
+;
             }
 
             this.loop();

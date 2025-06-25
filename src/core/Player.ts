@@ -24,7 +24,7 @@ export class Player {
     case 'right': if (y < 4) y++; break;
     default:
       console.log("❌ Invalid direction. Use: up, down, left, right.");
-      return; // no descontamos turno ni movemos
+      return; 
   }
 
   if (x !== original[0] || y !== original[1]) {
