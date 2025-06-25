@@ -13,20 +13,28 @@ export class Player {
         this.mapPieces = 0;
     }
 
-    move(direction: 'up' | 'down' | 'left' | 'right'): void{
-        let [x, y] = this.position;
+   move(direction: string): void {
+  let [x, y] = this.position;
+  const original = [x, y];
 
-        switch(direction){
-            case 'up': if (x > 0) x--; break;
-            case 'down': if (x < 4) x++; break;
-            case 'left': if (y > 0) y--; break;
-            case 'right': if (y < 4) y++; break;
-        }
+  switch (direction.toLowerCase()) {
+    case 'up': if (x > 0) x--; break;
+    case 'down': if (x < 4) x++; break;
+    case 'left': if (y > 0) y--; break;
+    case 'right': if (y < 4) y++; break;
+    default:
+      console.log("❌ Invalid direction. Use: up, down, left, right.");
+      return; // no descontamos turno ni movemos
+  }
 
-        this.position = [x, y];
-        this.turns--;
+  if (x !== original[0] || y !== original[1]) {
+    this.position = [x, y];
+    this.turns--;
+  } else {
+    console.log("⚠️ You can't go further in that direction.");
+  }
+}
 
-    }
 
     takeDamage(amount: number): void{
         this.life -= amount
@@ -36,11 +44,11 @@ export class Player {
         this.gold += amount
     }
 
-    collectMapPieces(): void{
+    collectMapPiece(): void{
         this.mapPieces++
     }
 
-    hasCompleteMapPieces(): boolean {
+    hasCompleteMap(): boolean {
         return this.mapPieces >= 3
     }
 

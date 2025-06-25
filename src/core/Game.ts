@@ -59,10 +59,10 @@ export class Game {
                         break;
                     case CellContentType.MapPiece:
                         console.log("🗺️🧩 a part of the map");
-                        this.player.collectMapPieces();
+                        this.player.collectMapPiece();
                         break;
                     case CellContentType.Treasure:
-                        if(this.player.hasCompleteMapPieces()){
+                        if(this.player.hasCompleteMap()){
                             console.log("🗺️💴 You've discovered the treasure and have the full map! Victory is yours!")
                         } else {
                             console.log("🗺️🚫You've discovered the treasure, but it's locked")
