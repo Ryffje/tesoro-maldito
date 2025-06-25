@@ -22,7 +22,33 @@ function Menu(){
             break;
             
             case '2':
-                console.log()
+                console.log(`
+🎯 Objective:
+Find the 3 map pieces and then open the treasure before your turns or life run out.
+
+🕹️ How to play:
+- Use commands: up, down, left, right to move.
+- Each cell can have traps, gold, map pieces, or treasure.
+- You start at (0,0) with 100 health and 15 turns.
+
+🏆 How to win:
+- Collect 3 map pieces and find the treasure.
+
+💀 How to lose:
+- Your life (traps) or turns run out.`);
+
+Menu();
+break;
+case '3':
+    console.log("👋 ¡Thanks for play buajajajajaja !");
+    r1.close();
+    break;
+    default:
+        console.log("❌ Invalid option. Retry");
+        Menu();
+        break;
         }
-    })
+    });
 }
+
+Menu();
