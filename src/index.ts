@@ -8,7 +8,7 @@ const r1 = readline.createInterface ({
 
 function Menu(){
     console.clear();
-    console.log("\n 🏝️🏴‍☠️The Cursed treasure");
+    console.log("\n 🏝️💀 The Cursed treasure");
     console.log("1. Start the adventure");
     console.log("2. Instructions");
     console.log("3. Exit \n");
