@@ -16,6 +16,12 @@ const turnsElement = document.getElementById('turns');
 const mapPiecesElement = document.getElementById('mapPieces');
 const goldElement = document.getElementById('gold');
 // Funciones de la interfaz
+function ensureFullscreen() {
+    const container = document.querySelector('.game-container');
+    if (document.fullscreenElement && document.fullscreenElement !== container) {
+        container.requestFullscreen();
+    }
+}
 function startGame() {
     game = new Game();
     player = game.getPlayer();
@@ -27,22 +33,30 @@ function startGame() {
     updateUI();
     renderGrid();
     showMessage('🏝️🏴‍☠️ ¡Bienvenido a la aventura! Usa los botones para moverte.');
+    if (document.fullscreenElement)
+        ensureFullscreen();
 }
 function showInstructions() {
     menuElement.style.display = 'none';
     instructionsElement.style.display = 'block';
     gameBoardElement.style.display = 'none';
+    if (document.fullscreenElement)
+        ensureFullscreen();
 }
 function hideInstructions() {
     menuElement.style.display = 'block';
     instructionsElement.style.display = 'none';
     gameBoardElement.style.display = 'none';
+    if (document.fullscreenElement)
+        ensureFullscreen();
 }
 function backToMenu() {
     gameActive = false;
     menuElement.style.display = 'block';
     instructionsElement.style.display = 'none';
     gameBoardElement.style.display = 'none';
+    if (document.fullscreenElement)
+        ensureFullscreen();
 }
 function movePlayer(direction) {
     if (!gameActive)
@@ -94,12 +108,15 @@ function movePlayer(direction) {
 function handleCellContent(content) {
     switch (content) {
         case CellContentType.Trap:
+            player.takeDamage(20);
             showMessage('💀 ¡Caíste en una trampa! -20 vida');
             break;
         case CellContentType.Gold:
+            player.collectGold(50);
             showMessage('🪙 ¡Encontraste oro! +50 monedas');
             break;
         case CellContentType.MapPiece:
+            player.collectMapPiece();
             showMessage('🗺️🧩 ¡Encontraste una pieza del mapa!');
             break;
         case CellContentType.Treasure:
@@ -133,19 +150,21 @@ function updateUI() {
 function getSVG(type) {
     switch (type) {
         case 'player':
-            return `<svg viewBox="0 0 48 48"><circle cx="24" cy="14" r="7" fill="#f9d29d" stroke="#222" stroke-width="2"/><ellipse cx="24" cy="36" rx="10" ry="8" fill="#222"/><rect x="18" y="21" width="12" height="14" rx="6" fill="#b5651d" stroke="#222" stroke-width="2"/><rect x="20" y="32" width="8" height="10" rx="4" fill="#b5651d" stroke="#222" stroke-width="2"/><rect x="14" y="35" width="6" height="8" rx="3" fill="#b5651d" stroke="#222" stroke-width="2"/><rect x="28" y="35" width="6" height="8" rx="3" fill="#b5651d" stroke="#222" stroke-width="2"/><rect x="21" y="10" width="6" height="6" rx="3" fill="#222"/></svg>`;
+            return '<img src="../assets/pirate.png" alt="Player" width="48" height="48">';
         case 'trap':
-            return `<svg viewBox="0 0 48 48"><ellipse cx="24" cy="40" rx="18" ry="6" fill="#333"/><polygon points="8,40 12,28 16,40" fill="#b5651d" stroke="#222" stroke-width="2"/><polygon points="20,40 24,28 28,40" fill="#b5651d" stroke="#222" stroke-width="2"/><polygon points="32,40 36,28 40,40" fill="#b5651d" stroke="#222" stroke-width="2"/></svg>`;
+            return '<img src="../assets/skull.png" alt="Trap" width="48" height="48">';
         case 'gold':
-            return `<svg viewBox="0 0 48 48"><rect x="8" y="28" width="32" height="12" rx="4" fill="#f4d03f" stroke="#b5651d" stroke-width="2"/><ellipse cx="24" cy="28" rx="16" ry="6" fill="#f9e79f" stroke="#b5651d" stroke-width="2"/></svg>`;
+            return '<img src="../assets/gold.png" alt="Gold" width="48" height="48">';
         case 'map':
-            return `<svg viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="24" rx="6" fill="#fbeec1" stroke="#b5651d" stroke-width="2"/><path d="M12 16 Q24 28 36 16" stroke="#b5651d" stroke-width="2" fill="none"/><circle cx="24" cy="24" r="3" fill="#e67e22"/></svg>`;
+            return '<img src="../assets/map.png" alt="Map" width="48" height="48">';
         case 'treasure':
-            return `<svg viewBox="0 0 48 48"><rect x="8" y="20" width="32" height="16" rx="4" fill="#b5651d" stroke="#222" stroke-width="2"/><rect x="12" y="24" width="24" height="8" rx="2" fill="#f4d03f" stroke="#b5651d" stroke-width="2"/><rect x="8" y="16" width="32" height="8" rx="4" fill="#d2691e" stroke="#222" stroke-width="2"/></svg>`;
+            return '<img src="../assets/treasure.png" alt="Treasure" width="48" height="48">';
+        case 'puzzle':
+            return '<img src="../assets/puzzle.png" alt="Puzzle Piece" width="48" height="48">';
         case 'empty':
-            return `<svg viewBox="0 0 48 48"><rect x="8" y="32" width="32" height="8" rx="4" fill="#bfa76f"/><ellipse cx="24" cy="36" rx="16" ry="4" fill="#a67c52"/></svg>`;
+            return '<img src="../assets/spade.png" alt="Empty" width="48" height="48">';
         case 'hidden':
-            return `<svg viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="24" rx="6" fill="#8b4513" stroke="#222" stroke-width="2"/><text x="24" y="32" text-anchor="middle" font-size="20" fill="#f4d03f" font-family="Arial">?</text></svg>`;
+            return '<img src="../assets/sand.png" alt="Hidden" width="48" height="48">';
         default:
             return '';
     }
@@ -219,9 +238,52 @@ function renderGrid() {
 function showMessage(message) {
     messageElement.textContent = message;
 }
+function fullscreenGame() {
+    const container = document.querySelector('.game-container');
+    const btn = document.getElementById('fullscreenBtn');
+    const exitBtn = document.getElementById('exitFullscreenBtn');
+    if (!document.fullscreenElement) {
+        container.requestFullscreen();
+        container.style.background = "url('assets/isla-fondo.png') center center/cover no-repeat";
+        container.style.width = '100vw';
+        container.style.height = '100vh';
+        btn.style.display = 'none';
+        exitBtn.style.display = 'block';
+    }
+}
+function exitFullscreenGame() {
+    const container = document.querySelector('.game-container');
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+        container.style.background = '';
+        container.style.width = '';
+        container.style.height = '';
+    }
+}
+document.addEventListener('fullscreenchange', () => {
+    const btn = document.getElementById('fullscreenBtn');
+    const exitBtn = document.getElementById('exitFullscreenBtn');
+    const container = document.querySelector('.game-container');
+    if (document.fullscreenElement) {
+        btn.style.display = 'none';
+        exitBtn.style.display = 'block';
+        container.style.background = "url('assets/isla-fondo.png') center center/cover no-repeat";
+        container.style.width = '100vw';
+        container.style.height = '100vh';
+    }
+    else {
+        btn.style.display = 'block';
+        exitBtn.style.display = 'none';
+        container.style.background = '';
+        container.style.width = '';
+        container.style.height = '';
+    }
+});
 // Hacer las funciones disponibles globalmente para el HTML
 window.startGame = startGame;
 window.showInstructions = showInstructions;
 window.hideInstructions = hideInstructions;
 window.backToMenu = backToMenu;
 window.movePlayer = movePlayer;
+window.fullscreenGame = fullscreenGame;
+window.exitFullscreenGame = exitFullscreenGame;

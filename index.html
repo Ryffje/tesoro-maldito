@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2d1810 100%);
+            background: none !important;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -34,19 +34,31 @@
             pointer-events: none;
         }
 
+        .main-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('assets/isla-fondo.png') center center/cover no-repeat;
+            z-index: 0;
+        }
+        .game-container, .menu, .main-buttons, .main-title-img {
+            position: relative;
+            z-index: 1;
+        }
+
         .game-container {
-            background: linear-gradient(145deg, #1a1a1a, #2d1810);
-            border: 3px solid #8b4513;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            max-width: 600px;
-            width: 100%;
+            background: url('assets/isla-fondo.png') center center/cover no-repeat !important;
+            min-height: 100vh;
+            min-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
+        /* 
         .game-container::before {
             content: '';
             position: absolute;
@@ -58,6 +70,7 @@
             border-radius: 17px;
             z-index: -1;
         }
+        */
 
         .game-title {
             text-align: center;
@@ -126,7 +139,7 @@
         }
 
         .info-item {
-            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            background: rgba(30, 20, 10, 0.45) !important;
             border: 2px solid #8b4513;
             padding: 8px 15px;
             border-radius: 8px;
@@ -151,8 +164,8 @@
         }
 
         .cell {
-            width: 50px;
-            height: 50px;
+            width: 36px;
+            height: 36px;
             border: 2px solid #8b4513;
             border-radius: 6px;
             display: flex;
@@ -163,6 +176,15 @@
             transition: all 0.3s ease;
             background: linear-gradient(145deg, #2d1810, #1a1a1a);
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            pointer-events: none;
         }
 
         .cell:hover {
@@ -270,7 +292,7 @@
         }
 
         .message {
-            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            background: rgba(30, 20, 10, 0.45) !important;
             border: 2px solid #8b4513;
             padding: 12px;
             border-radius: 8px;
@@ -287,7 +309,7 @@
 
         .instructions {
             display: none;
-            background: linear-gradient(145deg, #2d1810, #1a1a1a);
+            background: rgba(30, 20, 10, 0.45) !important;
             border: 2px solid #8b4513;
             padding: 20px;
             border-radius: 10px;
@@ -342,62 +364,127 @@
                 font-size: 1em;
             }
         }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 100;
+            padding: 6px 10px;
+            font-size: 1.2em;
+            min-width: unset;
+            min-height: unset;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            margin-left: 8px;
+        }
+
+        .main-title-img {
+            max-width: 600px;
+            max-height: 70vh;
+            object-fit: contain;
+            margin-bottom: 32px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .main-buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 60px;
+        }
+
+        .main-buttons .btn {
+            flex: 1 1 0;
+            min-width: 140px;
+        }
+
+        .game-panel {
+            background: rgba(30, 20, 10, 0.55);
+            border-radius: 20px;
+            padding: 32px 24px;
+            max-width: 700px;
+            margin: 40px auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            width: 100%;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .game-panel,
+        .instructions,
+        .message,
+        .info-item {
+            background: rgba(30, 20, 10, 0.55) !important;
+            border-radius: 20px;
+            border: 2px solid #8b4513;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        /* Elimina backgrounds sólidos o degradados de los paneles internos */
+        .instructions,
+        .message,
+        .info-item {
+            background: rgba(30, 20, 10, 0.45) !important;
+        }
     </style>
 </head>
-<body>
+<body style="min-height: 100vh; min-width: 100vw; margin: 0; padding: 0; background: none;">
     <div class="game-container">
-        <h1 class="game-title">🏝️💀 El Tesoro Maldito</h1>
-        
-        <div id="menu" class="menu">
-            <h2>¡Bienvenido a la aventura!</h2>
-            <div class="menu-buttons">
-                <button class="btn" onclick="startGame()">🎮 Iniciar Aventura</button>
-                <button class="btn" onclick="showInstructions()">📖 Instrucciones</button>
+        <div class="game-panel">
+            <div style="position: absolute; top: 24px; right: 32px; z-index: 10;">
+                <button id="fullscreenBtn" class="btn fullscreen-btn" onclick="fullscreenGame()" title="Pantalla Completa" style="display: block;">🖥️</button>
+                <button id="exitFullscreenBtn" class="btn fullscreen-btn" onclick="exitFullscreenGame()" title="Salir Pantalla Completa" style="display: none; color: #e74c3c; font-size: 1.5em;">❌</button>
             </div>
-        </div>
-
-        <div id="instructions" class="instructions">
-            <h3>🎯 Objetivo:</h3>
-            <p>Encuentra las 3 piezas del mapa y luego abre el tesoro antes de que se acaben tus turnos o tu vida.</p>
-            
-            <h3>🕹️ Cómo jugar:</h3>
-            <ul>
-                <li>Usa los botones de dirección para moverte por la isla</li>
-                <li>Cada celda puede contener trampas, oro, piezas de mapa o el tesoro</li>
-                <li>Empiezas en (0,0) con 100 de vida y 15 turnos</li>
-                <li>Las trampas te quitan 20 de vida</li>
-                <li>El oro te da 50 monedas</li>
-            </ul>
-            
-            <h3>🏆 Cómo ganar:</h3>
-            <p>Recoge 3 piezas de mapa y encuentra el tesoro.</p>
-            
-            <h3>💀 Cómo perder:</h3>
-            <p>Se te acaba la vida (trampas) o los turnos.</p>
-            
-            <button class="btn" onclick="hideInstructions()">Volver al Menú</button>
-        </div>
-
-        <div id="gameBoard" class="game-board">
-            <div class="game-info">
-                <div class="info-item">❤️ Vida: <span id="life">100</span></div>
-                <div class="info-item">🔁 Turnos: <span id="turns">15</span></div>
-                <div class="info-item">🧩 Mapa: <span id="mapPieces">0</span>/3</div>
-                <div class="info-item">🪙 Oro: <span id="gold">0</span></div>
+            <div id="menu" class="menu" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
+                <img src="assets/isla-titulo.png" alt="El Tesoro Maldito" class="main-title-img">
+                <div class="main-buttons">
+                    <button class="btn" onclick="startGame()">🎮 Iniciar Aventura</button>
+                    <button class="btn" onclick="showInstructions()">📖 Instrucciones</button>
+                </div>
             </div>
-
-            <div class="message" id="message">¡Usa las flechas para moverte!</div>
-
-            <div class="grid" id="grid"></div>
-
-            <div class="controls">
-                <button class="control-btn" onclick="movePlayer('up')">⬆️</button>
-                <button class="control-btn" onclick="movePlayer('left')">⬅️</button>
-                <button class="control-btn" onclick="movePlayer('right')">➡️</button>
-                <button class="control-btn" onclick="movePlayer('down')">⬇️</button>
+            <div id="instructions" class="instructions" style="display: none;">
+                <h3>🎯 Objetivo:</h3>
+                <p>Encuentra las 3 piezas del mapa y luego abre el tesoro antes de que se acaben tus turnos o tu vida.</p>
+                <h3>🕹️ Cómo jugar:</h3>
+                <ul>
+                    <li>Usa los botones de dirección para moverte por la isla</li>
+                    <li>Cada celda puede contener trampas, oro, piezas de mapa o el tesoro</li>
+                    <li>Empiezas en (0,0) con 100 de vida y 15 turnos</li>
+                    <li>Las trampas te quitan 20 de vida</li>
+                    <li>El oro te da 50 monedas</li>
+                </ul>
+                <h3>🏆 Cómo ganar:</h3>
+                <p>Recoge 3 piezas de mapa y encuentra el tesoro.</p>
+                <h3>💀 Cómo perder:</h3>
+                <p>Se te acaba la vida (trampas) o los turnos.</p>
+                <button class="btn" onclick="hideInstructions()">Volver al Menú</button>
             </div>
-
-            <button class="btn" onclick="backToMenu()">🏠 Volver al Menú</button>
+            <div id="gameBoard" class="game-board" style="display: none;">
+                <div class="game-info">
+                    <div class="info-item">❤️ Vida: <span id="life">100</span></div>
+                    <div class="info-item">🔁 Turnos: <span id="turns">15</span></div>
+                    <div class="info-item">🧩 Mapa: <span id="mapPieces">0</span>/3</div>
+                    <div class="info-item">🪙 Oro: <span id="gold">0</span></div>
+                </div>
+                <div class="message" id="message">¡Usa las flechas para moverte!</div>
+                <div class="grid" id="grid"></div>
+                <div class="controls">
+                    <button class="control-btn" onclick="movePlayer('up')">⬆️</button>
+                    <button class="control-btn" onclick="movePlayer('left')">⬅️</button>
+                    <button class="control-btn" onclick="movePlayer('right')">➡️</button>
+                    <button class="control-btn" onclick="movePlayer('down')">⬇️</button>
+                </div>
+                <button class="btn" onclick="backToMenu()">🏠 Volver al Menú</button>
+            </div>
         </div>
     </div>
 
