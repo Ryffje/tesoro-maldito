@@ -5,6 +5,7 @@ let game;
 let player;
 let gameMap;
 let gameActive = false;
+let treasureRevealed = false;
 // Elementos del DOM
 const menuElement = document.getElementById('menu');
 const instructionsElement = document.getElementById('instructions');
@@ -27,6 +28,7 @@ function startGame() {
     player = game.getPlayer();
     gameMap = game.getGameMap();
     gameActive = true;
+    treasureRevealed = false;
     menuElement.style.display = 'none';
     instructionsElement.style.display = 'none';
     gameBoardElement.style.display = 'flex';
@@ -72,7 +74,23 @@ function movePlayer(direction) {
             handleCellContent(content);
         }
         else {
-            showMessage('🔁 Ya has estado aquí antes.');
+            // Si la celda ya está revelada, pero es el tesoro y el jugador tiene el mapa completo, mostrar victoria
+            if (cell.content === CellContentType.Treasure && player.hasCompleteMap()) {
+                showMessage('🗺️💴 ¡Victoria! Encontraste el tesoro con el mapa completo. ¡Felicidades!');
+                gameActive = false;
+                setTimeout(() => {
+                    if (confirm('¿Quieres jugar de nuevo?')) {
+                        startGame();
+                    }
+                    else {
+                        backToMenu();
+                    }
+                }, 3000);
+                return;
+            }
+            else {
+                showMessage('🔁 Ya has estado aquí antes.');
+            }
         }
         updateUI();
         renderGrid();
@@ -104,6 +122,19 @@ function movePlayer(direction) {
             return;
         }
     }
+    // Verificar victoria automática al mover, si el tesoro ya fue revelado y el jugador tiene el mapa completo
+    if (gameActive && treasureRevealed && player.hasCompleteMap()) {
+        showMessage('🗺️💴 ¡Victoria! Encontraste el tesoro y ahora tienes el mapa completo. ¡Felicidades!');
+        gameActive = false;
+        setTimeout(() => {
+            if (confirm('¿Quieres jugar de nuevo?')) {
+                startGame();
+            }
+            else {
+                backToMenu();
+            }
+        }, 3000);
+    }
 }
 function handleCellContent(content) {
     switch (content) {
@@ -113,13 +144,28 @@ function handleCellContent(content) {
             break;
         case CellContentType.Gold:
             player.collectGold(50);
-            showMessage('🪙 ¡Encontraste oro! +50 monedas');
+            player.turns += 2;
+            showMessage('🪙 ¡Encontraste oro! +50 monedas y +2 turnos');
             break;
         case CellContentType.MapPiece:
             player.collectMapPiece();
             showMessage('🗺️🧩 ¡Encontraste una pieza del mapa!');
+            // Si el tesoro ya fue revelado y ahora el jugador tiene el mapa completo, gana automáticamente
+            if (treasureRevealed && player.hasCompleteMap()) {
+                showMessage('🗺️💴 ¡Victoria! Encontraste el tesoro y ahora tienes el mapa completo. ¡Felicidades!');
+                gameActive = false;
+                setTimeout(() => {
+                    if (confirm('¿Quieres jugar de nuevo?')) {
+                        startGame();
+                    }
+                    else {
+                        backToMenu();
+                    }
+                }, 3000);
+            }
             break;
         case CellContentType.Treasure:
+            treasureRevealed = true;
             if (player.hasCompleteMap()) {
                 showMessage('🗺️💴 ¡Victoria! Encontraste el tesoro con el mapa completo. ¡Felicidades!');
                 gameActive = false;
@@ -140,6 +186,7 @@ function handleCellContent(content) {
             showMessage('🌾 No hay nada aquí.');
             break;
     }
+    updateUI();
 }
 function updateUI() {
     lifeElement.textContent = player.life.toString();
