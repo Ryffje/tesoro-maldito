@@ -1,5 +1,5 @@
 # Tesoro Maldito
 
-<!-- Cambio menor para forzar redeploy en Vercel -->
+<!-- Forzar redeploy limpio en Vercel para limpiar caché CDN -->
 
 Proyecto en TypeScript orientado a objetos
