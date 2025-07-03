@@ -4,8 +4,10 @@
   "description": "Proyecto en TypeScript orientado a objetos",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "npx tsc",
+    "postbuild": "cp index.html dist/ && cp -r assets dist/",
+    "build:vercel": "npx tsc && cp index.html dist/ && cp -r assets dist/",
+    "dev": "npx tsc --watch",
     "serve": "npx http-server . -p 8080 -o",
     "start": "npm run build && npm run serve"
   },

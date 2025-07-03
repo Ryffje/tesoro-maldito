@@ -1,6 +1,6 @@
-import { Player } from "./Player.js";
-import { GameMap } from "./Map.js";
-import { CellContentType } from "../models/gridCell.js";
+import { Player } from "./Player";
+import { GameMap } from "./Map";
+import { CellContentType } from "../models/gridCell";
 // import * as readline from 'readline'; // No necesario para versión web
 
 export class Game {
