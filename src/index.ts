@@ -1,7 +1,7 @@
-import { Game } from './core/Game';
-import { Player } from './core/Player';
-import { GameMap } from './core/Map';
-import { CellContentType } from './models/gridCell';
+import { Game } from './core/Game.js';
+import { Player } from './core/Player.js';
+import { GameMap } from './core/Map.js';
+import { CellContentType } from './models/gridCell.js';
 
 // Variables globales para el juego
 let game: Game;
