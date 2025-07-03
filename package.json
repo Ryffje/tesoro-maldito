@@ -5,19 +5,24 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "postbuild": "cp index.html dist/ && cp -r assets dist/",
-    "build:vercel": "node ./node_modules/typescript/bin/tsc && cp index.html dist/ && cp -r assets dist/",
+    "postbuild": "npx cpx index.html dist/ && npx cpx \"assets/**/*\" dist/assets",
+    "build:vercel": "node ./node_modules/typescript/bin/tsc && npx cpx index.html dist/ && npx cpx \"assets/**/*\" dist/assets",
     "dev": "npx tsc --watch",
     "serve": "npx http-server . -p 8080 -o",
     "start": "npm run build && npm run serve"
   },
-  "keywords": ["game", "treasure", "typescript"],
+  "keywords": [
+    "game",
+    "treasure",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "cpx": "^1.5.0",
     "http-server": "^14.1.1"
   }
 }
